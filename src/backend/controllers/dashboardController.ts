@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { collections } from "../db";
 import type { BlogPostFormData } from "../../types/bitkrets";
-import { validateBlogPostFormData } from "../../frontend/utils/validate";
+import { validateBlogPostFormData } from "../../../utils/validate";
 import { ObjectId } from "mongodb";
 import { blogPostFormSubmitType } from "../../constants";
 
