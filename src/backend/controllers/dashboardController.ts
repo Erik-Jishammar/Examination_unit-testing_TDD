@@ -42,8 +42,19 @@ export async function getBlogPosts({
 }
 
 export async function createBlogPost(req: Request, res: Response) {
+  const formData: BlogPostFormData = req.body;
   
-  return res.status(501).send("Not Implementdd");
+  if (!validateBlogPostFormData(formData)) {
+    return res.status(400).send("Invalid form data!");
+  }
+
+  try {
+    await collections.blogPosts?.insertOne(formData);
+    console.log(`Created blogPost`);
+    return res.status(200).send("created blog post");
+  } catch (error) {
+    return res.status(500).send("Failed to create blog post");
+  }
 }
 
 export async function dashboard(req: Request, res: Response) {
