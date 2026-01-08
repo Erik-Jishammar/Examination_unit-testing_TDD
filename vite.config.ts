@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
   }
   return {
     test: {
-      include: ["./tests/unit/*.{test,spec}.?(c|m)[jt]s?(x)"],
+      include: ["./tests/unit/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
     },
     build: {
       rollupOptions: {
