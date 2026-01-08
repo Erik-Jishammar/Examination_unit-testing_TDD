@@ -1,4 +1,5 @@
 import { test, expect, describe } from "vitest";
+import { blogTitleLength,blogPostFormSubmitType } from "../../src/constants";
 import {
   validateBlogPostFormData,
   validateEmailAddressStructure,
@@ -6,9 +7,11 @@ import {
   validateBlogIdIsNumber, 
   validateBlogTitleLength,
   validateCreateBlogPostFormData,
+  validateEditBlogPostFormData,
+  validateDeleteBlogPostFormData,
   
 } from "../../utils/validate";
-import { blogTitleLength,blogPostFormSubmitType } from "../../src/constants";
+
 
 /*
 
@@ -90,40 +93,82 @@ describe("validateBlogTitleLength", () => {
   });
 });
 
+
+const validCreateBlogPostFormData = {
+  blogTitle: "This is a valid title length",
+  blogText: "This is a valid blog text content.",
+  submitType: blogPostFormSubmitType.create,
+};
+
+const invalidCreateBlogPostFormData = [
+  { ...validCreateBlogPostFormData, blogTitle: "Too short" },
+  { ...validCreateBlogPostFormData, blogTitle: "A".repeat(blogTitleLength.maxLength + 1) },
+  { ...validCreateBlogPostFormData, blogText: "" },
+  { ...validCreateBlogPostFormData, blogText: "A".repeat(1001) },
+  { ...validCreateBlogPostFormData, submitType: "invalid" as any },
+];
+
 describe("validateCreateBlogPostFormData", () => {
   test("returns true for valid data", () => {
-    const validData = {
-      blogTitle: "Valid title",
-      blogText: "Some valid blog text",
-      submitType: "create" as const
-    };
-    expect(validateCreateBlogPostFormData(validData)).toBe(true);
+    expect(validateCreateBlogPostFormData(validCreateBlogPostFormData)).toBe(true);
   });
-
-  test("returns false when title is empty", () => {
-    const invalidData = {
-      blogTitle: "",
-      blogText: "Some text",
-      submitType: "create" as const
-    };
-    expect(validateCreateBlogPostFormData(invalidData)).toBe(false);
-  });
-
-  test("returns false when text is empty", () => {
-    const invalidData = {
-      blogTitle: "Valid title",
-      blogText: "",
-      submitType: "create" as const
-    };
-    expect(validateCreateBlogPostFormData(invalidData)).toBe(false);
-  });
-
-  test("returns false when submitType is wrong", () => {
-    const invalidData = {
-      blogTitle: "Valid title",
-      blogText: "Some text",
-      submitType: "wrong" as any
-    };
-    expect(validateCreateBlogPostFormData(invalidData)).toBe(false);
+  
+  test("returns false for invalid data", () => {
+    // Testa alla invalid cases från formData
+    invalidCreateBlogPostFormData.forEach((formData) => {
+      expect(validateCreateBlogPostFormData(formData)).toBe(false);
+    });
   });
 });
+
+const validEditBlogPostFormData = {
+  blogId: "123",
+  blogTitle: "This is a valid title length",
+  blogText: "This is a valid blog text content.",
+  submitType: blogPostFormSubmitType.edit,
+};
+
+const invalidEditBlogPostFormData = [
+  { ...validEditBlogPostFormData, blogId: "" },
+  { ...validEditBlogPostFormData, blogId: "abc" },
+  { ...validEditBlogPostFormData, blogTitle: "Too short" },
+  { ...validEditBlogPostFormData, blogText: "" },
+  { ...validEditBlogPostFormData, submitType: "invalid" as any },
+];
+
+describe("validateEditBlogPostFormData", () => {
+  test("returns true for valid data", () => {
+    expect(validateEditBlogPostFormData(validEditBlogPostFormData)).toBe(true);
+  });
+
+  test("returns false for invalid data", () => {
+    invalidEditBlogPostFormData.forEach((formData) => {
+      expect(validateEditBlogPostFormData(formData)).toBe(false);
+    });
+  });
+});
+
+const validDeleteBlogPostFormData = {
+  blogId: "123",
+  submitType: blogPostFormSubmitType.delete,
+};
+
+const invalidDeleteBlogPostFormData = [
+  { ...validDeleteBlogPostFormData, blogId: "" },
+  { ...validDeleteBlogPostFormData, blogId: "abc" },
+  { ...validDeleteBlogPostFormData, submitType: "invalid" as any },
+];
+
+describe("validateDeleteBlogPostFormData", () => {
+  test("returns true for valid data", () => {
+    expect(validateDeleteBlogPostFormData(validDeleteBlogPostFormData)).toBe(true);
+  });
+
+  test("returns false for invalid data", () => {
+    invalidDeleteBlogPostFormData.forEach((formData) => {
+      expect(validateDeleteBlogPostFormData(formData)).toBe(false);
+    });
+  });
+});
+
+
