@@ -1,5 +1,6 @@
 import { blogPostFormSubmitType } from "../../constants";
 import type { BlogPost, BlogPostFormData } from "../../types/bitkrets";
+import { createBlogPostForm, createBlogPostList } from "../elements";
 
 function html() {
   return `
@@ -9,14 +10,7 @@ function html() {
                 Loading blog posts...
             </div>
             <h3>Write new blog post:</h3>
-            <form method="post" id="blog-form" style="display:flex;flex-direction:column;">
-                <input type="text" id="blog-id" value="" hidden>
-                <label for="blog-title">Blog Title</label>
-                <input type="text" name="blog-title" id="blog-title">
-                <label for="blog-text">Blog Text</label>
-                <textarea name="blog-text" id="blog-text" rows="4" cols="12"></textarea>
-                <button id="submit-button" data-submit-type="create">Create Post</button>
-            </form>
+            ${createBlogPostForm()}
         </div>
     `;
 }
@@ -27,19 +21,7 @@ async function logic() {
   console.log(blogPosts);
   const blogPostsDiv = document.getElementById("blog-posts");
   if (blogPostsDiv) {
-    blogPostsDiv.innerHTML = blogPosts
-      .map(
-        (post) =>
-          `
-                <div class="post" style="border:1px dotted">
-                    <h5 data-title=${post._id}>${post.blogTitle}</h5>
-                    <p data-text=${post._id}>${post.blogText}</p>
-                    <button data-edit=${post._id}>Edit</button>
-                    <button data-delete=${post._id}>Delete</button>
-                </div>
-            `
-      )
-      .join("");
+    blogPostsDiv.innerHTML = createBlogPostList(blogPosts);
   } else {
     console.log("Could not find blogPostDiv");
   }
