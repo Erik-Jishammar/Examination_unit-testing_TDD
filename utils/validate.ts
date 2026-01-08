@@ -119,5 +119,10 @@ export function validateEditBlogPostFormData(
 export function validateDeleteBlogPostFormData(
   deleteBlogPostFormData: DeleteBlogPostFormData
 ) {
-  return false;
+  const validBlogId = validateBlogId(deleteBlogPostFormData.blogId);
+  const validSubmitType = validateSubmitType(
+    deleteBlogPostFormData.submitType,
+    blogPostFormSubmitType.delete
+  );
+  return validBlogId && validSubmitType;
 }
