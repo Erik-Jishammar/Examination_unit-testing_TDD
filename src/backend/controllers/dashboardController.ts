@@ -41,6 +41,11 @@ export async function getBlogPosts({
   }
 }
 
+export async function createBlogPost(req: Request, res: Response) {
+  
+  return res.status(501).send("Not Implementdd");
+}
+
 export async function dashboard(req: Request, res: Response) {
   const formData: BlogPostFormData = req.body;
   if (!validateBlogPostFormData(formData)) {
