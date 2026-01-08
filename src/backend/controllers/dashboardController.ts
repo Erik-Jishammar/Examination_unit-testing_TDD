@@ -57,6 +57,30 @@ export async function createBlogPost(req: Request, res: Response) {
   }
 }
 
+export async function editBlogPost(req: Request, res: Response) {
+  const formData: BlogPostFormData = req.body;
+
+  if (!validateBlogPostFormData(formData)) {
+    return res.status(400).send("Invalid form data!");
+  }
+
+  try {
+    const filter = { _id: new ObjectId(formData.blogId) };
+    const updateDoc = {
+      $set: {
+        blogTitle: formData.blogTitle,
+        blogText: formData.blogText,
+      },
+    };
+    
+    await collections.blogPosts?.updateOne(filter, updateDoc);
+    console.log(`Updated blogPost: ${formData.blogId}`);
+    return res.status(200).send("updated blogPost to db");
+  } catch (error) {
+    return res.status(500).send("Failed to edit post");
+  }
+}
+
 export async function dashboard(req: Request, res: Response) {
   const formData: BlogPostFormData = req.body;
   if (!validateBlogPostFormData(formData)) {

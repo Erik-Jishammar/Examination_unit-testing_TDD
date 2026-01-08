@@ -1,12 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response } from 'express';
-import { createBlogPost } from '../../../src/backend/controllers/dashboardController';
+import { createBlogPost, editBlogPost } from '../../../src/backend/controllers/dashboardController';
 import { blogPostFormSubmitType } from '../../../src/constants';
 
 describe('Dashboard Controller', () => {
     let mockRequest: Partial<Request>;
     let mockResponse: Partial<Response>;
-
 
     beforeEach(() => {
         vi.resetAllMocks();
@@ -35,6 +34,21 @@ describe('Dashboard Controller', () => {
              await createBlogPost(mockRequest as Request, mockResponse as Response);
 
              
+             expect(mockResponse.status).toHaveBeenCalledWith(200);
+        });
+    });
+
+    describe('editBlogPost', () => {
+        it('should return 200 when updating a valid post', async () => {
+             mockRequest.body = {
+                 blogId: "65e6d8a3a9b9a8b1a8b1a8b1", // Example ObjectId
+                 blogTitle: "Updated Title",
+                 blogText: "Updated Text",
+                 submitType: blogPostFormSubmitType.edit
+             };
+
+             await editBlogPost(mockRequest as Request, mockResponse as Response);
+
              expect(mockResponse.status).toHaveBeenCalledWith(200);
         });
     });
