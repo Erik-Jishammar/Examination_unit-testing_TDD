@@ -6,17 +6,24 @@ import { ObjectId } from "mongodb";
 import { blogPostFormSubmitType } from "../../constants";
 
 export async function getBlogPost(req: Request, res: Response) {
-  return res.status(501).send("Not Implemented"); // failed test
-} // logic
+  
+  try {
+    const blogId = req.params.blogId;
+    const post = await collections.blogPosts?.findOne({ _id: new ObjectId(blogId) });
+    
+    if (post) {
+      return res.status(200).send(post);
+    } else {
+      return res.status(404).send("Blog post was not found");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("Failed to get blog post");
+  }
+} 
 
 
-export async function getAllBlogPosts({
-  req,
-  res,
-}: {
-  req: Request;
-  res: Response;
-}) {
+export async function getAllBlogPosts(req: Request, res: Response) {
   try {
     const blogPosts = await collections.blogPosts?.find({}).toArray();
     if (blogPosts) {
@@ -70,10 +77,20 @@ export async function editBlogPost(req: Request, res: Response) {
 }
 
 export async function deleteBlogPost(req: Request, res: Response) {
+  const blogId = req.body.blogId;
   
-  return res.status(501).send("Not Implemented"); // failed test
+  if (!blogId) {
+     return res.status(400).send("Invalid form data!");
+  }
 
-  // logic
+  try {
+    await collections.blogPosts?.deleteOne({ _id: new ObjectId(blogId) });
+    console.log(`Deleted blogPost: ${blogId}`);
+    return res.status(200).send("deleted blog post");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send("failed to delete blog post");
+  }
 }
 
 export async function dashboard(req: Request, res: Response) {

@@ -4,7 +4,7 @@ import path from "path";
 import {
   dashboard,
   getBlogPost,
-  getBlogPosts,
+  getAllBlogPosts,
 } from "./src/backend/controllers/dashboardController.js";
 import { connectToDatabase } from "./src/backend/db.js";
 
@@ -29,7 +29,7 @@ async function main() {
   const app = express();
   app.use(express.json());
 
-  app.get("/posts", getBlogPosts);
+  app.get("/posts", getAllBlogPosts);
   app.get("/blog/:id", getBlogPost);
   app.post("/dashboard", dashboard);
 

@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response } from 'express';
 import { createBlogPost, editBlogPost, deleteBlogPost, getBlogPost, getAllBlogPosts } from '../../../src/backend/controllers/dashboardController';
 import { blogPostFormSubmitType } from '../../../src/constants';
+import { collections } from '../../../src/backend/db';
 
 describe('Dashboard Controller', () => {
     let mockRequest: Partial<Request>;
@@ -67,20 +68,34 @@ describe('Dashboard Controller', () => {
         });
     });
     describe('getBlogPost', () => {
-        it ('should return 200 when getting a post', async () => {
+        it ('should return 404 when post does not exist', async () => {
             mockRequest.params = {
-                blogId:'1234'
+                blogId:'123'
             }
 
             await getBlogPost(mockRequest as Request, mockResponse as Response);
 
-            expect(mockResponse.status).toHaveBeenCalledWith(200);
+            expect(mockResponse.status).toHaveBeenCalledWith(404);
         })
     })
-    describe('getAllBlogPosts'), async () => {
-        it("should return 200 if all posts are loaded", async () => {
-            mockRequest.body = {}
-        })
-    }
+    describe('getAllBlogPosts', () => {
+        it("should return 200 and a list of posts", async () => {
+    
+            collections.blogPosts = {
+                find: vi.fn().mockReturnThis(),
+                toArray: vi.fn().mockResolvedValue([{ title: 'Test Post' }])
+            } as any;
+
+            await getAllBlogPosts(mockRequest as Request, mockResponse as Response);
+            expect(mockResponse.status).toHaveBeenCalledWith(200);
+        });
+
+        it("should return 204 if no posts are found", async () => {
+            collections.blogPosts = undefined;
+
+            await getAllBlogPosts(mockRequest as Request, mockResponse as Response);
+            expect(mockResponse.status).toHaveBeenCalledWith(204);
+        });
+    });
 });
 
