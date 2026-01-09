@@ -1,6 +1,7 @@
 import { blogPostFormSubmitType } from "../../constants";
 import type { BlogPost, BlogPostFormData } from "../../types/bitkrets";
 import { createBlogPostForm, createBlogPostList } from "../elements";
+import { getFormDataFromInputs } from "../formHandler";
 
 function html() {
   return `
@@ -106,12 +107,18 @@ async function logic() {
       submitType === blogPostFormSubmitType.edit ||
       submitType === blogPostFormSubmitType.delete
     ) {
-      const formData: BlogPostFormData = {
-        blogId: blogId.value,
-        blogTitle: blogTitle.value,
-        blogText: blogText.value,
-        submitType: submitType,
-      };
+      const formData = getFormDataFromInputs(
+          blogId.value,
+          blogTitle.value,
+          blogText.value,
+          submitType
+      );
+
+      if (!formData) {
+          alert("Invalid form data! Title must be between 15 and 50 characters!");
+          return;
+      }
+
       console.log(formData);
       try {
         const response = await fetch("http://localhost:3000/dashboard", {
