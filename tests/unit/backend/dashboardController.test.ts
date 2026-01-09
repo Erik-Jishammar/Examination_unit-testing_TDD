@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response } from 'express';
-import { createBlogPost, editBlogPost } from '../../../src/backend/controllers/dashboardController';
+import { createBlogPost, editBlogPost, deleteBlogPost, getBlogPost, getAllBlogPosts } from '../../../src/backend/controllers/dashboardController';
 import { blogPostFormSubmitType } from '../../../src/constants';
 
 describe('Dashboard Controller', () => {
@@ -52,4 +52,35 @@ describe('Dashboard Controller', () => {
              expect(mockResponse.status).toHaveBeenCalledWith(200);
         });
     });
+
+    describe('deleteBlogPost', () => {
+        it('should return 200 when deleting a post', async () => {
+            
+             mockRequest.body = {
+                 blogId: "123",
+                 submitType: blogPostFormSubmitType.delete
+             };
+
+             await deleteBlogPost(mockRequest as Request, mockResponse as Response);
+
+            expect(mockResponse.status).toHaveBeenCalledWith(200);
+        });
+    });
+    describe('getBlogPost', () => {
+        it ('should return 200 when getting a post', async () => {
+            mockRequest.params = {
+                blogId:'1234'
+            }
+
+            await getBlogPost(mockRequest as Request, mockResponse as Response);
+
+            expect(mockResponse.status).toHaveBeenCalledWith(200);
+        })
+    })
+    describe('getAllBlogPosts'), async () => {
+        it("should return 200 if all posts are loaded", async () => {
+            mockRequest.body = {}
+        })
+    }
 });
+

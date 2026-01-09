@@ -5,24 +5,12 @@ import { validateBlogPostFormData } from "../../../utils/validate";
 import { ObjectId } from "mongodb";
 import { blogPostFormSubmitType } from "../../constants";
 
-export async function getBlogPost({
-  req,
-  res,
-}: {
-  req: Request;
-  res: Response;
-}) {
-  try {
-    const blogId = req.params.blogId;
-    return res.send(
-      await collections.blogPosts?.findOne({ _id: new ObjectId(blogId) })
-    );
-  } catch (error) {
-    console.log(error);
-  }
-}
+export async function getBlogPost(req: Request, res: Response) {
+  return res.status(501).send("Not Implemented"); // failed test
+} // logic
 
-export async function getBlogPosts({
+
+export async function getAllBlogPosts({
   req,
   res,
 }: {
@@ -79,6 +67,13 @@ export async function editBlogPost(req: Request, res: Response) {
   } catch (error) {
     return res.status(500).send("Failed to edit post");
   }
+}
+
+export async function deleteBlogPost(req: Request, res: Response) {
+  
+  return res.status(501).send("Not Implemented"); // failed test
+
+  // logic
 }
 
 export async function dashboard(req: Request, res: Response) {
