@@ -1,7 +1,7 @@
 import { blogPostFormSubmitType } from "../../constants";
-import type { BlogPost, BlogPostFormData } from "../../types/bitkrets";
+import type { BlogPost } from "../../types/bitkrets";
 import { createBlogPostForm, createBlogPostList } from "../elements";
-import { getFormDataFromInputs } from "../formHandler";
+import { getFormDataFromInputs, getPostDataForDelete } from "../formHandler";
 
 function html() {
   return `
@@ -47,12 +47,7 @@ async function logic() {
         let postId = deleteBtn.dataset["delete"];
         if (postId) {
           try {
-            const fd: BlogPostFormData = {
-              blogId: postId,
-              blogTitle: "delete",
-              blogText: "delete",
-              submitType: blogPostFormSubmitType.delete,
-            };
+            const fd = getPostDataForDelete(postId);
             console.log(fd);
             const res = await fetch("http://localhost:3000/dashboard", {
               method: "post",

@@ -1,6 +1,6 @@
 import { validateBlogTitle } from "../../utils/validate";
 import type { BlogPostFormData, BlogPostFormSubmitType } from "../types/bitkrets";
-
+import { blogPostFormSubmitType } from "../constants";
 export function getFormDataFromInputs(
     blogId: string,
     blogTitle: string,
@@ -21,7 +21,12 @@ export function getFormDataFromInputs(
         blogText,
         submitType
     };
-}
-export function getPostDataForDelete(blogId: string):any{
-    return {}; // logic inc
+} // delete 
+export function getPostDataForDelete(blogId: string):BlogPostFormData{
+    return {
+        blogId,
+        blogTitle: "delete",
+        blogText: "delete",
+        submitType: blogPostFormSubmitType.delete
+    };
 }
