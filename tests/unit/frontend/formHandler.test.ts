@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getFormDataFromInputs } from '../../../src/frontend/formHandler';
+import { getFormDataFromInputs, getPostDataForDelete } from '../../../src/frontend/formHandler';
 import { blogPostFormSubmitType } from '../../../src/constants';
 
 describe('formHandler', () => {
@@ -25,6 +25,17 @@ describe('formHandler', () => {
             );
 
             expect(result).toBeNull();
+        });
+    });
+
+    describe('getPostDataForDelete', () => {
+        it('should return a valid object structured for delete', () => {
+            const postId = "999";
+            const result = getPostDataForDelete(postId);
+
+            expect(result.blogId).toBe("999");
+            expect(result.submitType).toBe(blogPostFormSubmitType.delete);
+            expect(result.blogTitle).toBe("delete");
         });
     });
 });

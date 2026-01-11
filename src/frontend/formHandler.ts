@@ -22,3 +22,6 @@ export function getFormDataFromInputs(
         submitType
     };
 }
+export function getPostDataForDelete(blogId: string):any{
+    return {}; // logic inc
+}
